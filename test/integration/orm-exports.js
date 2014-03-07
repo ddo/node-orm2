@@ -115,11 +115,7 @@ describe("ORM.connect()", function () {
 		var db = ORM.connect("unknown://db");
 
 		db.on("connect", function (err) {
-			should.equal(err.literalCode, 'NO_SUPPORT');
-			should.equal(
-				err.message,
-				"Connection protocol not supported - have you installed the database driver for unknown?"
-			);
+			err.message.should.equal("CONNECTION_PROTOCOL_NOT_SUPPORTED");
 
 			return done();
 		});
@@ -130,7 +126,7 @@ describe("ORM.connect()", function () {
 
 		db.on("connect", function (err) {
 			should.exist(err);
-			should.equal(err.message.indexOf("Connection protocol not supported"), -1);
+			err.message.should.not.equal("CONNECTION_PROTOCOL_NOT_SUPPORTED");
 			err.message.should.not.equal("CONNECTION_URL_NO_PROTOCOL");
 			err.message.should.not.equal("CONNECTION_URL_EMPTY");
 
@@ -189,22 +185,9 @@ describe("ORM.connect()", function () {
 
 		it("should return an error if unknown protocol is passed", function (done) {
 			ORM.connect("unknown://db", function (err) {
-				should.equal(err.literalCode, 'NO_SUPPORT');
-				should.equal(
-					err.message,
-					"Connection protocol not supported - have you installed the database driver for unknown?"
-				);
+				err.message.should.equal("CONNECTION_PROTOCOL_NOT_SUPPORTED");
 
 				return done();
-			});
-		});
-
-		it("should allow pool and debug settings to be false", function(done) {
-			var connString = common.getConnectionString() + "debug=false&pool=false";
-			ORM.connect(connString, function(err, db) {
-				db.driver.opts.pool.should.equal(false);
-				db.driver.opts.debug.should.equal(false);
-				done();
 			});
 		});
 	});

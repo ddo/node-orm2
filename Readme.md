@@ -34,7 +34,7 @@ npm test
 - Create Model associations, find, check, create and remove
 - Define custom validations (several builtin validations, check instance properties before saving - see [enforce](http://github.com/dresende/node-enforce) for details)
 - Model instance caching and integrity (table rows fetched twice are the same object, changes to one change all)
-- Plugins: [MySQL FTS](http://dresende.github.io/node-orm-mysql-fts) , [Pagination](http://dresende.github.io/node-orm-paging) , [Transaction](http://dresende.github.io/node-orm-transaction), [Timestamps](http://github.com/SPARTAN563/node-orm-timestamps), [Migrations](https://github.com/locomote/node-migrate-orm2)
+- Plugins: [MySQL FTS](http://dresende.github.io/node-orm-mysql-fts) , [Pagination](http://dresende.github.io/node-orm-paging) , [Transaction](http://dresende.github.io/node-orm-transaction), [Timestamps](http://github.com/SPARTAN563/node-orm-timestamps)
 
 ## Introduction
 
@@ -107,10 +107,6 @@ app.get("/", function (req, res) {
 You can call `orm.express` more than once to have multiple database connections. Models defined across connections
 will be joined together in `req.models`. **Don't forget to use it before `app.use(app.router)`, preferably right after your
 assets public folder(s).**
-
-## Examples
-
-See `examples/anontxt` for an example express based app.
 
 ## Documentation
 
@@ -607,14 +603,6 @@ animal.hasOwner(function..)         // Checks if owner exists
 animal.removeOwner()                // Sets owner_id to 0
 ```
 
-**Chain Find**
-
-The hasOne association is also chain find compatible. Using the example above, we can do this to access a new instance of a ChainFind object:
-
-```js
-Animal.findByOwner({ /* options */ })
-```
-
 **Reverse access**
 
 ```js
@@ -624,12 +612,8 @@ Animal.hasOne('owner', Person, {reverse: 'pets'})
 will add the following:
 
 ```js
-// Instance methods
 person.getPets(function..)
 person.setPets(cat, function..)
-
-// Model methods
-Person.findByPets({ /* options */ }) // returns ChainFind object
 ```
 
 ### hasMany

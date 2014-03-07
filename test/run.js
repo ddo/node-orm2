@@ -1,9 +1,9 @@
 var Mocha    = require("mocha");
-var glob     = require("glob");
+var fs       = require("fs");
 var path     = require("path");
 var common   = require("./common");
 var logging  = require("./logging");
-var location = path.normalize(path.join(__dirname, "integration", "**", "*.js"));
+var location = path.normalize(path.join(__dirname, "integration"));
 var mocha    = new Mocha({
 	reporter: "progress"
 });
@@ -20,9 +20,14 @@ switch (common.hasConfig(common.protocol())) {
 runTests();
 
 function runTests() {
-	glob.sync(location).forEach(function (file) {
+	fs.readdirSync(location).filter(function (file) {
+		return file.substr(-3) === '.js';
+	}).forEach(function (file) {
 		if (!shouldRunTest(file)) return;
-		mocha.addFile(file);
+
+		mocha.addFile(
+			path.join(location, file)
+		);
 	});
 
 	logging.info("Testing **%s**", common.getConnectionString());
@@ -33,11 +38,11 @@ function runTests() {
 }
 
 function shouldRunTest(file) {
-	var name  = path.basename(file).slice(0, -3)
+	var name  = file.substr(0, file.length - 3);
 	var proto = common.protocol();
-	var exclude = ['model-aggregate','property-number-size','smart-types'];
 
-	if (proto == "mongodb" && exclude.indexOf(name) >= 0) return false;
+	if (proto == "mongodb" && [ "model-aggregate",
+	                            "property-number-size", "smart-types" ].indexOf(name) >= 0) return false;
 
 	return true;
 }
