@@ -6,7 +6,7 @@ Mysql only
 
 Using "unique: true" causes "ER_DUP_KEYNAME" on sync: [here](https://github.com/dresende/node-orm2/issues/326)
 
-I just do this for easier on npm deployment only.
+I just do this for easier on npm deployment.
 
 ##Installation
 
